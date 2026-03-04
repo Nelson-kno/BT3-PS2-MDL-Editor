@@ -1,0 +1,341 @@
+QToolButton {
+            background-color: #3a3a3a; /* Un gris oscuro para el botón normal */
+            border: 1px solid #555555; /* Borde sutil */
+            border-radius: 8px; /* Esquinas redondeadas */
+            color: white; /* Color del texto blanco */
+            padding: 10px; /* Espacio interno para icono y texto */
+            min-width: 80px; /* Asegura un ancho mínimo */
+            min-height: 80px; /* Asegura una altura mínima */
+            margin: 5px; /* Margen entre botones en la cuadrícula */
+        }
+
+        QToolButton:hover {
+            background-color: #505050; /* Más claro al pasar el ratón */
+            border: 1px solid #777777; /* Borde más visible al hover */
+        }
+
+        QToolButton:pressed {
+            background-color: #2a2a2a; /* Más oscuro/hundido al presionar */
+            border: 1px solid #444444; /* Borde más oscuro al presionar */
+        }
+
+        /* Estilo cuando un QToolButton está 'checked' (seleccionado) */
+        QToolButton:checked {
+            background-color: #2c7ac7; /* Un azul distintivo para el estado seleccionado */
+            border: 1px solid #205a96; /* Borde azul más oscuro */
+        }
+        
+QWidget {
+	background-color: #19191a;
+    color:#fff5ee;
+    /*background-color: #0e0e0e;*//*body_color*/
+}
+QFrame#Principal {
+    /*border: 1px solid #19191a; */ /* Borde más suave */
+    background-color: #202020; /* Fondo del frame ligeramente más claro que la ventana */
+}
+
+QFrame {
+     /*border: 1px solid #444444;*/ /* Borde más suave */
+    /*border-radius: 8px;*/
+    background-color: #2C2C2C; /* Fondo del frame ligeramente más claro que la ventana */
+    color: #D0D0D0;
+    /*padding: 10px;*/}
+QLabel {
+    /*border: 1px solid #444444;*/ /* Borde más suave */
+    /*background-color: #333333; /* Fondo del frame ligeramente más claro que la ventana */
+    color: #D0D0D0;
+    background-color: #202020;
+}
+QListWidget {
+/*border: 1px solid #444444;*/ /* Borde más suave */
+background-color: #333333; /* Fondo del frame ligeramente más claro que la ventana */
+color: #D0D0D0;
+}
+
+QTabWidget {
+    background-color: red; /* Mismo fondo que la ventana principal */
+    border: none; /* Quitamos el borde por defecto */
+}
+QTabWidget::pane { /* El área que contiene el contenido de las pestañas */
+    background-color: #202020; /* Fondo del contenido de la pestaña */
+}
+QTabBar {
+    background-color: transparent; /* Transparente para que el fondo del QTabWidget se vea */
+    qproperty-drawBase: 0; /* Elimina la línea base extra */
+    border-bottom: 1px solid #3a3a3a; /* Línea separadora sutil debajo de las pestañas */
+}
+/* Estilo para cada pestaña individual (QTabButton) */
+QTabBar::tab {
+    background-color: #000000; /* Fondo de la pestaña inactiva */
+    color: #b0b0b0; /* Color del texto de la pestaña inactiva */
+}
+QTabBar::tab:selected {
+    background-color: #171616; /* Mismo color que el panel para que parezca que está "abierta" */
+    color: #007acc; /* Color de acento azul para la pestaña seleccionada */
+
+}
+
+
+QProgressBar {
+    /*border: 1px solid #555555;*/ /* Borde sutil */
+    /*border-radius: 5px;*/
+    background-color: #444444; /* Fondo de la barra vacía oscuro */
+    text-align: center;
+    color: #D0D0D0; /* Color del texto del porcentaje */
+    /*height: 25px;*/
+}
+QProgressBar::chunk {
+    background-color: #64B5F6; /* Azul desaturado, un buen color de acento */
+    /* Alternativas de acento:
+    background-color: #81D4FA; (Azul cielo más claro)
+    background-color: #80CBC4; (Verde menta)
+    background-color: #FFB74D; (Naranja suave)
+    background-color: #BA68C8; (Púrpura suave)
+    */
+    border-radius: 4px; /* Opcional: para que el chunk tenga bordes redondeados */
+}
+QPushButton {
+    color:#ffffff;
+    border : 2px solid;
+    border-radius: 5px;
+    border-color: #1a66f8;
+    background-color: #1a66f8;
+}
+QPushButton:hover {
+    background-color: #3A3B3C;
+}
+QPushButton:pressed {
+    background-color: #242526;
+}
+QPushButton:disabled {
+    background-color: #333333;
+    color: #888888;
+    border: 1px solid #555555;
+}
+
+
+/* Menu */
+QMenu{
+    background-color: #181818;
+    color: #d1d3d4;/*color menu*/
+    }
+QMenu::item::selected{
+    background-color: #dcdedf;
+    color: #3d4450;/*color menu select*/
+    }
+/* MenuBar */     
+QMenuBar {
+    background-color: #1d1d1d;  /*#171d25*/
+    }
+QMenuBar::item {
+    background-color: #1d1d1d;
+    color: #d7d9db;  /*color menu bar no select*/
+    }
+QMenuBar::item:selected {    
+    background-color: #1d1d1d;
+    color: #ffffff;/*color menu bar select paso*/
+    }
+QMenuBar::item:pressed {
+    /*background: #4885f9;*/
+    color: #1a9dfb;
+        }
+/* GroupBox */
+       
+QGroupBox{
+    background-color: #202020;
+    color: #f5f5ff;
+    }
+QGroupBox::title#center{
+    color: #f5f5ff;
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+    padding-left: 10px;
+    padding-right: 10px;
+    }
+
+QCheckBox{
+    color: white;
+}
+QCheckBox::checked{
+    color:greenyellow;
+}
+QCheckBox::indicator {
+    border: 3px solid rgb(52, 59, 72);
+	width: 15px;
+	height: 15px;
+	border-radius: 10px;
+    background: rgb(44, 49, 60);
+}
+QCheckBox::indicator:hover {
+    border: 3px solid rgb(58, 66, 81);
+}
+QCheckBox::indicator:checked {
+    background: 3px solid rgb(52, 59, 72);
+	border: 3px solid rgb(52, 59, 72);	
+	/*border-image: url(img/check.svg);*/
+}
+
+
+
+
+QTableWidget::item{
+	border-color: rgb(44, 49, 60);
+	padding-left: 1px;/*padding-left: 5px*/
+	padding-right: 1px;/*padding-right: 5px*/
+	gridline-color: rgb(44, 49, 60);
+}
+QTableWidget::item:selected{
+	background-color: #3e7dc9;
+}
+QHeaderView::section{
+  Background-color: rgb(39, 44, 54);
+  max-width: 30px;
+  border: 1px solid rgb(44, 49, 60);
+  border-style: none;
+  border-bottom: 1px solid rgb(44, 49, 60);
+  border-right: 1px solid rgb(44, 49, 60);
+  }
+  QTableWidget::horizontalHeader {	
+  background-color: rgb(81, 255, 0);
+  }
+  QHeaderView::section:horizontal
+  {
+    border: 1px solid rgb(32, 34, 42);
+    background-color: #000000;
+    padding: 3px;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+  }
+  QHeaderView::section:vertical
+  {
+    border: 1px solid rgb(44, 49, 60);
+  }
+  
+  QTableWidget QTableCornerButton::section {
+    background-color: #181C25;
+  }
+  
+/* SCROLL BARS HORIZONTAL */
+QScrollBar:horizontal {
+  border: none;
+  background: rgb(52, 59, 72);
+  height: 14px;
+  margin: 0px 21px 0 21px;
+border-radius: 0px;
+}
+QScrollBar::handle:horizontal {
+  background: #3e7dc9;
+  min-width: 25px;
+  border-radius: 6px;/*7px*/
+}
+QScrollBar::add-line:horizontal {
+  border: none;
+  background: rgb(55, 63, 77);
+  width: 20px;
+border-top-right-radius: 7px;
+  border-bottom-right-radius: 7px;
+  subcontrol-position: right;
+  subcontrol-origin: margin;
+}
+QScrollBar::sub-line:horizontal {
+  border: none;
+  background: rgb(55, 63, 77);
+  width: 20px;
+  border-top-left-radius: 7px;/*7px*/
+  border-bottom-left-radius: 7px;
+  subcontrol-position: left;
+  subcontrol-origin: margin;
+}
+QScrollBar::up-arrow:horizontal, QScrollBar::down-arrow:horizontal
+{
+   background: none;
+}
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal
+{
+   background: none;
+}
+/* SCROLL BARS VERTICAL */
+QScrollBar:vertical {/*espaciado de scroll bar*/
+ border: none;
+ background: rgb(52, 59, 72);
+ width: 12px;/*14px*/
+ margin: 21px 0 21px 0;/*21px 0 21px 0*/
+ border-radius: 0px;
+}
+QScrollBar::handle:vertical {	/*bara de desplazamiento scroll bar*/
+ background: #3e7dc9;
+ min-height: 25px;
+ border-radius: 6px;/*7px*/
+}
+QScrollBar::add-line:vertical {/*fela abajo scrollbar*/
+  border: none;
+ background: #3e7dc9;
+  height: 20px;
+ border-bottom-left-radius: 3px;/*7px*/
+ border-bottom-right-radius: 3px;/*7px*/
+  subcontrol-position: bottom;
+  subcontrol-origin: margin;
+}
+QScrollBar::sub-line:vertical {
+  border: none;
+  background: #3e7dc9;/*fela arriba scrollbar*/
+  height: 20px;
+  border-top-left-radius: 3px;/*7px*/
+  border-top-right-radius: 3px;/*7px*/
+  subcontrol-position: top;
+  subcontrol-origin: margin;
+}
+QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {
+  background: none;
+}
+
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+  background: none;
+}
+
+/**/
+QPushButton#secundario {
+    color:#ffffff;
+    background-color: #4CAF50;
+    border: 2px solid #3c8a3f;
+}
+QPushButton:hover#secundario {
+    background-color: #3A3B3C;
+}
+QPushButton:pressed#secundario {
+    background-color: #242526;
+}
+QPushButton:disabled#secundario {
+    background-color: #333333;
+    color: #888888;
+    border: 1px solid #555555;
+}
+
+QPushButton:checked#secundario {
+    background-color: #AF4F4C; /* Color de fondo cuando está presionado/checked */
+    border: 2px solid #AF4F4C ;
+}
+
+
+QMessageBox {
+
+    background-color: #202020; 
+    color: #D0D0D0; /* Color del texto */
+}
+/* Estilo para las etiquetas de texto dentro del QMessageBox */
+QMessageBox QLabel {
+    /* Asegurar que el fondo del texto sea transparente o oscuro */
+    background-color: transparent; 
+    color: #D0D0D0; 
+    padding: 5px;
+}
+
+/* Asegurar que los botones dentro del QMessageBox sigan el estilo de QPushButton */
+/* Ya tienes un estilo global para QPushButton, pero es bueno ser explícito: */
+QMessageBox QPushButton {
+    color: #ffffff;
+    border: 2px solid #1a66f8;
+    background-color: #1a66f8;
+    border-radius: 5px;
+}

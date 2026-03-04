@@ -1,0 +1,18 @@
+# 1. Ignorar TODO el contenido de la carpeta raíz
+/*
+
+# 2. Excepciones: Permitir archivos específicos de la raíz
+!/main.py
+!/styleapp.css
+!/.gitignore
+!/README.md
+!/LICENSE
+
+# 3. Excepciones: Permitir carpetas de código y su contenido
+!/mdl/
+!/txt/
+!/ventanas/
+
+# 4. Ignorar archivos basura de Python dentro de las carpetas permitidas
+**/__pycache__/
+**/*.py[cod]
