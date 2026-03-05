@@ -21,11 +21,18 @@ class MenuPrincipal(QMenuBar):
         menu_archivo.addSeparator()
         menu_archivo.addAction(self.accion_salir)
 
+        # --- UTILIDADES ---
+        menu_utilidades = self.addMenu("Utilidades")
+        self.accion_importar_anm = QAction("Importar (.anm) y Convertir Animaciones (.json)", self)
+        menu_utilidades.addAction(self.accion_importar_anm)
+
         # --- INFORMACIÓN ---
         menu_info = self.addMenu("Información")
         self.accion_ayuda = QAction("Ayuda", self)
         menu_info.addAction(self.accion_ayuda)
-        self.accion_ayuda.triggered.connect(self.mostrar_ayuda)
+        
+
+        
 
     def mostrar_ayuda(self):
         QMessageBox.information(self, "Ayuda", "BT3 PS2 MDL Editor\nBy: Nelson Kno.")

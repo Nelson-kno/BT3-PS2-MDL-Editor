@@ -26,10 +26,14 @@ from txt.dato_parr_a import DatosParrA
 from txt.dataId import DataId
 from mdl.lector_mdl import DataPart
 
+#035_PjPoseCr.anm
+from anm.lector_anm import AnmLectura
+
 class VentanaPrincipal(QMainWindow):
     def __init__(self):
+        version = "v0.1.0-alpha"
         super().__init__()
-        self.setWindowTitle("BT3 PS2 MDL Editor")
+        self.setWindowTitle(f"BT3 PS2 MDL Editor {version}")
         self.setGeometry(100, 100, 1200, 800)
         
         if os.path.exists("styleapp.css"):
@@ -63,6 +67,8 @@ class VentanaPrincipal(QMainWindow):
         
         if hasattr(self.vent_mdl, 'btn_ver_mdl_completo'):
             self.vent_mdl.btn_ver_mdl_completo.clicked.connect(self.ver_modelo_completo)
+
+        self.menu.accion_importar_anm.triggered.connect(self.descomprimir_anm_a_json)
 
     def cambiar_modo_render(self, indice):
         """Cambia el modo sin deseleccionar el modelo completo"""
@@ -182,6 +188,32 @@ class VentanaPrincipal(QMainWindow):
                 d[self.data_id.listId1txt[t]] = img.texBmp
             except: continue
         return d
+
+    def descomprimir_anm_a_json(self):
+        files, _ = QFileDialog.getOpenFileNames(
+            self, 
+            "Seleccionar Animaciones .anm", 
+            "", 
+            "Animaciones (*.anm)"
+        )
+        
+        if files:
+            nombres_procesados = []
+            for f in files:
+                # Extraemos solo el nombre del archivo para la lista
+                nombres_procesados.append(os.path.basename(f))
+                
+                # Instanciamos el lector y procesamos
+                lector = AnmLectura(f)
+            
+            # Unimos los nombres con saltos de línea para que se vean como lista
+            lista_nombres = "\n".join(nombres_procesados)
+            
+            # Formateamos el mensaje final
+            mensaje = (f"Se han convertido {len(files)} animaciones correctamente:\n\n"
+                       f"{lista_nombres}")
+            
+            QMessageBox.information(self, "Proceso Completado", mensaje)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

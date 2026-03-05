@@ -9,6 +9,7 @@
 !/LICENSE
 
 # 3. Excepciones: Permitir carpetas de código y su contenido
+!/anm/
 !/mdl/
 !/txt/
 !/ventanas/
