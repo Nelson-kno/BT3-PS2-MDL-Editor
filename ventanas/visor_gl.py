@@ -1,4 +1,5 @@
 # Copyright (C) 2026 Nelson kno
+
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,6 +19,7 @@ class Visor3D(QGLWidget):
         self.ids_texturas_subpartes = []
         self.diccionario_binarios = {}
         self.cache_gl_textures = {}
+        self.display_list = None  # Cache de geometría en GPU
         
         self.mostrar_textura = False
         self.modo_completo = True 
@@ -29,34 +31,59 @@ class Visor3D(QGLWidget):
         self.rot_y = -178.5   
         self.pan_x = 0.0       
         self.pan_y = 0.0     
+        self.pan_z = 0.0
         self.last_mouse_pos = QPoint()
 
     def initializeGL(self):
         glClearColor(0.07, 0.07, 0.07, 1.0)
         glEnable(GL_DEPTH_TEST)
-        glDisable(GL_CULL_FACE)
+
+        glDepthFunc(GL_LEQUAL)           # Tipo de prueba de profundidad estándar
+
+        #glEnable(GL_CULL_FACE)  # Optimización: no dibujar caras internas
+        
         glShadeModel(GL_SMOOTH)
+        glCullFace(GL_BACK)
+        
         glEnable(GL_LIGHTING)
         glEnable(GL_LIGHT0)
         glEnable(GL_COLOR_MATERIAL)
         glLightfv(GL_LIGHT0, GL_POSITION, [1.0, 1.0, 1.0, 0.0])
-        # Ajuste de luz 
         glLightfv(GL_LIGHT0, GL_AMBIENT, [0.3, 0.3, 0.3, 1.0])
         glLightfv(GL_LIGHT0, GL_DIFFUSE, [0.9, 0.9, 0.9, 1.0])
         glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE)
 
+    def generar_display_list(self):
+        """Graba la geometría en la GPU para que no pese al mover la cámara"""
+        if self.display_list is not None:
+            glDeleteLists(self.display_list, 1)
+        
+        self.display_list = glGenLists(1)
+        glNewList(self.display_list, GL_COMPILE)
+        
+        for i, p_list in enumerate(self.subpartes_a_dibujar):
+            if not self.modo_completo and self.indice_seleccionado != -1 and i != self.indice_seleccionado:
+                continue
+            
+            id_t = self.ids_texturas_subpartes[i] if i < len(self.ids_texturas_subpartes) else None
+            self._renderizar_malla(p_list, id_t)
+            
+        glEndList()
+
     def paintGL(self):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glLoadIdentity()
-        glTranslatef(self.pan_x, self.pan_y, self.zoom)
-        glRotatef(self.rot_x, 1, 0, 0)
-        glRotatef(self.rot_y, 0, 1, 0)
-        glScalef(1.0, -1.0, 1.0) # Inversión de eje Y necesaria
-        
-        self.dibujar_escena()
 
-    def dibujar_escena(self):
-        # Grid Fijo 
+        glTranslated(0, 0, self.zoom)
+        glRotatef(self.rot_x, 1.0, 0.0, 0.0)
+        glRotatef(self.rot_y, 0.0, 1.0, 0.0)
+
+        self.dibujar_ejes() 
+
+        glTranslated(self.pan_x, self.pan_y, self.pan_z)
+        glScalef(1.0, -1.0, 1.0) 
+
+        # DIBUJO OPTIMIZADO
         glDisable(GL_LIGHTING); glDisable(GL_TEXTURE_2D)
         glBegin(GL_LINES); glColor3f(0.2, 0.2, 0.2)
         for i in range(-50, 51, 5):
@@ -64,13 +91,9 @@ class Visor3D(QGLWidget):
             glVertex3f(-50, 0, i); glVertex3f(50, 0, i)
         glEnd(); glEnable(GL_LIGHTING)
 
-        # Lógica de dibujo con resaltado de respaldo
-        for i, p_list in enumerate(self.subpartes_a_dibujar):
-            if not self.modo_completo and self.indice_seleccionado != -1 and i != self.indice_seleccionado:
-                continue
-            
-            id_t = self.ids_texturas_subpartes[i] if i < len(self.ids_texturas_subpartes) else None
-            self._renderizar_malla(p_list, id_t)
+        if self.display_list is not None:
+            glCallList(self.display_list)
+        
 
     def _renderizar_malla(self, puntos, id_txt):
         if self.mostrar_textura and id_txt:
@@ -96,7 +119,6 @@ class Visor3D(QGLWidget):
         if id_txt not in self.diccionario_binarios: return None
         try:
             img = QImage.fromData(self.diccionario_binarios[id_txt]).convertToFormat(QImage.Format_RGBA8888)
-            # QUITADO el mirrored para que no se rote en Y y se vea igual que en el juego
             tid = glGenTextures(1)
             glBindTexture(GL_TEXTURE_2D, tid)
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
@@ -105,7 +127,6 @@ class Visor3D(QGLWidget):
             return tid
         except: return None
 
-    # Controles de mouse
     def mouseMoveEvent(self, event):
         diff = event.pos() - self.last_mouse_pos
         self.last_mouse_pos = event.pos()
@@ -117,10 +138,46 @@ class Visor3D(QGLWidget):
             self.rot_x += diff.y() * 0.5 
         self.update()
 
-    def mousePressEvent(self, event): self.last_mouse_pos = event.pos()
-    def wheelEvent(self, event): self.zoom += (event.angleDelta().y() / 120) * 5.0; self.update()
+    def mousePressEvent(self, event): 
+        self.last_mouse_pos = event.pos()
+
+    def wheelEvent(self, event): 
+        self.zoom += (event.angleDelta().y() / 120) * 5.0; self.update()
+
     def resizeGL(self, w, h):
         glViewport(0, 0, w, h)
         glMatrixMode(GL_PROJECTION); glLoadIdentity()
         if h > 0: gluPerspective(45, w/h, 0.1, 5000.0)
         glMatrixMode(GL_MODELVIEW)
+    
+    def limpiar_cache_texturas(self):
+        if hasattr(self, 'cache_gl_textures') and self.cache_gl_textures:
+            glDeleteTextures(list(self.cache_gl_textures.values()))
+        
+        if self.display_list is not None:
+            glDeleteLists(self.display_list, 1)
+            self.display_list = None
+
+        self.cache_gl_textures = {}
+        self.diccionario_binarios = {}
+        self.subpartes_a_dibujar = []
+        self.update()
+
+    def centrar_camara(self, posicion, radio):
+        self.pan_x = -posicion[0]
+        self.pan_y = posicion[1]
+        self.pan_z = -posicion[2]
+        r_val = radio[3] if isinstance(radio, list) else radio
+        distancia_aire = r_val * 3.5 if r_val > 0 else 15.0
+        self.zoom = -posicion[2] - distancia_aire
+        self.update()
+
+    def dibujar_ejes(self):
+        glDisable(GL_LIGHTING)
+        glLineWidth(2.0)
+        glBegin(GL_LINES)
+        glColor3f(1, 0, 0); glVertex3f(0, 0, 0); glVertex3f(15, 0, 0) # X
+        glColor3f(0, 1, 0); glVertex3f(0, 0, 0); glVertex3f(0, 15, 0) # Y
+        glColor3f(0, 0, 1); glVertex3f(0, 0, 0); glVertex3f(0, 0, 15) # Z
+        glEnd()
+        glLineWidth(1.0); glEnable(GL_LIGHTING)

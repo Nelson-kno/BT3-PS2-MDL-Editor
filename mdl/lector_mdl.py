@@ -6,6 +6,7 @@
 # (at your option) any later version.
 
 import json
+import struct
 
 class DataSubPart:
     def __init__(self, parte):
@@ -57,7 +58,16 @@ class DataPart:
             
             # ID del hueso (bytes 10:12)
             bone_id = file[inicio+10:inicio+11].hex().upper()
-            
+
+            # Posicion de hueso
+            posicionador = list(struct.unpack('<4f', file[inicio+16:inicio+32])) # Es el vector de posición del hueso actual 4 floats (x, y, z, w)
+            posicionador_hueso_conectado = list(struct.unpack('<4f', file[inicio+32:inicio+48])) # Es el vector de posición del hueso al que está conectado (padre) 4 floats (x, y, z, w)
+            resta_posicionador_y_posicionador_conectada = list(struct.unpack('<4f', file[inicio+48:inicio+64])) # Es la resta entre la posición del hueso actual y la posición del hueso conectado (padre) 4 floats (x, y, z, w)
+            centro_malla = list(struct.unpack('<4f', file[inicio+64:inicio+80])) # Es el centro de la malla del hueso 4 floats (x, y, z, w)
+            radios_diagonal = list(struct.unpack('<4f', file[inicio+80:inicio+96])) # Son los radios 3 floats (x, y, z) y la raiz diagonal /2 (w) 
+    
+
+
             # 2. Creamos la estructura para este Bone ID
             self.datos_modelo[bone_id] = {
                 "parte_data": {
@@ -65,11 +75,19 @@ class DataPart:
                     "fin": inicio + tamano_parte,
                     "tamano_parte": tamano_parte,
                     "conexion_parent": conexion_parent,
-                    "bone_id": bone_id
+                    "bone_id": bone_id,
+                    "posicion": posicionador,
+                    "posicion_hueso_conectado": posicionador_hueso_conectado,
+                    "resta_posicion_y_posicion_conectada": resta_posicionador_y_posicionador_conectada,
+                    "centro_malla": centro_malla,
+                    "radios_diagonal": radios_diagonal
                 },
                 "subpartes_data": {} # Aquí guardaremos lo que devuelva DataSubPart
             }
-
+            if bone_id == "03":
+                print(f"posicionador: {posicionador}")
+                print(f"posicionador_hueso_conectado: {posicionador_hueso_conectado}")
+                print(f"resta_posicionador_y_posicionador_conectada: {resta_posicionador_y_posicionador_conectada}")
             # 3. Procesar Subpartes
             # Si el tamaño es mayor a 64, significa que tiene datos de malla/textura
             #if tamano_parte > 64:

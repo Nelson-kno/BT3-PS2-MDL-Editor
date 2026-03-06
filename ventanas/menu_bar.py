@@ -24,7 +24,12 @@ class MenuPrincipal(QMenuBar):
         # --- UTILIDADES ---
         menu_utilidades = self.addMenu("Utilidades")
         self.accion_importar_anm = QAction("Importar (.anm) y Convertir Animaciones (.json)", self)
+        self.accion_ver_jerarquia = QAction("Ver Jerarquía de Huesos (Tree)", self)
+
         menu_utilidades.addAction(self.accion_importar_anm)
+
+        menu_utilidades.addSeparator() # Una línea para separar animaciones de modelos
+        menu_utilidades.addAction(self.accion_ver_jerarquia)
 
         # --- INFORMACIÓN ---
         menu_info = self.addMenu("Información")

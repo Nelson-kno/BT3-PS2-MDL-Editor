@@ -5,10 +5,12 @@
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 
-from PySide2.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QListWidget, QLabel, QListWidgetItem, QPushButton,QComboBox
+from PySide2.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QListWidget, QLabel, QListWidgetItem, QPushButton,QComboBox, QMessageBox
 from PySide2.QtGui import QColor
 from PySide2.QtCore import Qt
 from .visor_gl import Visor3D
+
+from ventanas.visor_huesos import VentanaArbolHuesos
 
 
 class VentanaMDL(QWidget):
@@ -79,3 +81,14 @@ class VentanaMDL(QWidget):
         for i in range(len(subpart_dict)):
             txt = f"Subparte {i}"
             self.lista_subpartes.addItem(txt)
+
+
+
+    def abrir_visor_jerarquia(self):
+        # Verificamos si hay un modelo cargado en la app
+        # Si usas la instancia de DataPart que cargó el archivo:
+        if hasattr(self, 'lector_actual') and self.lector_actual.datos_modelo:
+            ventana = VentanaArbolHuesos(self.lector_actual.datos_modelo, self)
+            ventana.exec_()
+        else:
+            QMessageBox.warning(self, "Aviso", "Primero debes abrir un archivo MDL.")
